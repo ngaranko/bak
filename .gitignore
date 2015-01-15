@@ -52,3 +52,5 @@ docs/_build/
 
 # PyBuilder
 target/
+backups/*
+etc/*.sqlite3
