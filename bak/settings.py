@@ -37,6 +37,11 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django_rq',
+    'djsupervisor',
+
+    'task_queue',
+
     'bak.projects',
     'bak.actions',
 )
@@ -84,12 +89,43 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "bak/static"),
+)
 
 BACKUPS_DIR = os.path.join(BASE_DIR, 'backups')
 
-TEMPLATE_LOADERS = (
-    ('django.template.loaders.cached.Loader', (
-        'django.template.loaders.filesystem.Loader',
-        'django.template.loaders.app_directories.Loader',
-    )),
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'bak/templates'),
 )
+
+
+RQ_SHOW_ADMIN_LINK = True
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+        'DEFAULT_TIMEOUT': 360,
+    },
+}
+
+SUPERVISOR_CONFIG_FILE = os.path.join(BASE_DIR, 'etc/supervisord.conf')
+
+
+SUIT_CONFIG = {
+    'ADMIN_NAME': 'OIPA',
+    'MENU': (
+        # Keep original label and models
+        'sites',
+        {'app': 'auth', 'label': 'Authorization', 'icon':'icon-lock'},
+        {'app': 'bak.projects', 'label': 'Projects', 'icon':'icon-lock'},
+        # Rename app and set icon
+        {'label': 'Task queue', 'url': ( '/queue/'), 'icon':'icon-tasks', 'models': [
+            {'label': 'Task overview', 'url': ( '/queue/')},
+            {'label': 'Default queue', 'url': ( '/queue/queues/0/')},
+            {'label': 'Parse queue', 'url': ( '/queue/queues/1/')},
+            {'label': 'Failed tasks', 'url': ( '/queue/queues/2/')},
+        ]},
+    )
+}

@@ -1,2 +1,7 @@
 django
 fabric
+rq
+django-rq
+django-supervisor
+rq-scheduler
+django-suit

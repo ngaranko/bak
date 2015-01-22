@@ -54,3 +54,4 @@ docs/_build/
 target/
 backups/*
 etc/*.sqlite3
+log/*.log

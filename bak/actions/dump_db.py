@@ -9,6 +9,7 @@ def dump_database(project):
     """
     Dumps database for a project
     """
+    env.password = 'vagrant'
     env.use_ssh_config = True
     env.host_string = str(project.host)
 
